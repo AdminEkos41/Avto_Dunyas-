@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avto Dünyası | Ekoş</title>
+    <style>
+        body { background: #0f0f0f; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
+        header { background: linear-gradient(135deg, #ff0000, #800000); padding: 30px; border-radius: 15px; margin-bottom: 25px; box-shadow: 0 5px 20px rgba(255,0,0,0.4); }
+        .search-container { background: #1a1a1a; padding: 25px; border-radius: 15px; border: 1px solid #333; margin-bottom: 30px; }
+        input { padding: 12px; margin: 8px; border-radius: 8px; border: 1px solid #444; background: #252525; color: white; width: 250px; outline: none; }
+        input:focus { border-color: #ff0000; }
+        button { padding: 12px 25px; background: #ff0000; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        button:hover { background: #cc0000; transform: translateY(-2px); }
+        .car-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .car-card { background: #1e1e1e; border-radius: 15px; overflow: hidden; border: 1px solid #333; transition: 0.3s; }
+        .car-card:hover { border-color: #ff0000; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        .car-card img { width: 100%; height: 180px; object-fit: cover; }
+        .car-details { padding: 15px; text-align: left; }
+        .car-details h3 { margin: 0; color: #ff0000; font-size: 1.4rem; }
+        .price-tag { display: inline-block; background: #238636; color: white; padding: 5px 12px; border-radius: 5px; margin-top: 10px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🚗 AVTO DÜNYASI</h1>
+    <p>Model, İl və Qiymət üzrə Professional Axtarış</p>
+</header>
+
+<div class="search-container">
+    <input type="text" id="nameInp" placeholder="Marka (məs: BMW)">
+    <input type="number" id="yearInp" placeholder="Buraxılış ili">
+    <button onclick="filterCars()">Axtarış Et</button>
+</div>
+
+<div class="car-grid" id="displayArea">
+    </div>
+
+<script>
+    // AZƏRBAYCAN BAZARI ÜÇÜN NÜMUNƏ BAZA
+    const database = [
+        { brand: "Mercedes", model: "W212", year: 2014, price: "35.500 AZN", img: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=400" },
+        { brand: "BMW", model: "F10", year: 2015, price: "38.000 AZN", img: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400" },
+        { brand: "Toyota", model: "Corolla", year: 2018, price: "27.500 AZN", img: "https://images.unsplash.com/photo-1623860831270-bb9590021d51?w=400" },
+        { brand: "Hyundai", model: "Santa Fe", year: 2016, price: "31.200 AZN", img: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=400" },
+        { brand: "Kia", model: "Optima", year: 2015, price: "24.800 AZN", img: "https://images.unsplash.com/photo-1630038662969-9065a3637e1a?w=400" }
+    ];
+
+    function filterCars() {
+        const name = document.getElementById('nameInp').value.toLowerCase();
+        const year = document.getElementById('yearInp').value;
+        const area = document.getElementById('displayArea');
+        area.innerHTML = "";
+
+        const result = database.filter(car => {
+            return car.brand.toLowerCase().includes(name) && (year === "" || car.year == year);
+        });
+
+        if(result.length > 0) {
+            result.forEach(car => {
+                area.innerHTML += `
+                    <div class="car-card">
+                        <img src="${car.img}" alt="car">
+                        <div class="car-details">
+                            <h3>${car.brand} ${car.model}</h3>
+                            <p>İl: ${car.year} | Azərbaycan Bazarı</p>
+                            <span class="price-tag">${car.price}</span>
+                        </div>
+                    </div>
+                `;
+            });
+        } else {
+            area.innerHTML = "<p>Bu kriteriyalara uyğun maşın tapılmadı.</p>";
+        }
+    }
+    // Səhifə açılanda hamısını göstər
+    filterCars();
+</script>
+
+</body>
+</html>
