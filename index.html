@@ -3,104 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avto Dünya | Premium</title>
+    <title>Avto Dünya | Elan Paneli</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --main-red: #ca1016; --dark-bg: #121212; --card-bg: #1d1d1d; --text-gray: #a5a5a5; }
-        body { background-color: var(--dark-bg); color: white; font-family: sans-serif; margin: 0; padding-bottom: 80px; }
-        header { background: var(--dark-bg); padding: 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 100; }
-        .logo { color: var(--main-red); font-weight: bold; font-size: 1.5rem; text-decoration: none; text-transform: uppercase; }
-        .filter-section { padding: 15px; background: var(--card-bg); margin: 10px; border-radius: 12px; }
-        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        input, select { background: #2a2a2a; border: 1px solid #444; color: white; padding: 12px; border-radius: 8px; width: 100%; box-sizing: border-box; }
-        .add-btn-main { background: var(--main-red); color: white; padding: 15px; border-radius: 12px; text-align: center; font-weight: bold; margin: 10px; cursor: pointer; border: none; width: calc(100% - 20px); }
-        .car-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px; }
-        .car-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; position: relative; }
-        .car-card img { width: 100%; height: 120px; object-fit: cover; }
-        .car-info { padding: 10px; }
-        .car-price { font-size: 1.1rem; font-weight: bold; margin-bottom: 5px; }
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #181818; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #333; }
-        .nav-item { color: var(--text-gray); text-align: center; font-size: 0.7rem; text-decoration: none; }
-        .nav-item.active { color: var(--main-red); }
-        #uploadModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 200; overflow-y: auto; padding: 20px; box-sizing: border-box; }
+        :root { --main-red: #ca1016; --dark-bg: #121212; --card-bg: #1d1d1d; }
+        body { background: var(--dark-bg); color: white; font-family: sans-serif; margin: 0; }
+        
+        /* Addım-Addım Pəncərəsi */
+        .step-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--dark-bg); z-index: 1000; padding: 20px; box-sizing: border-box; }
+        .active-step { display: block; animation: slideIn 0.3s ease-out; }
+        
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
+        .header-step { display: flex; align-items: center; margin-bottom: 20px; }
+        .back-btn { font-size: 1.5rem; margin-right: 15px; cursor: pointer; }
+        
+        /* Seçimlər Siyahısı (Şəkildəki kimi) */
+        .option-list { list-style: none; padding: 0; }
+        .option-item { background: var(--card-bg); padding: 15px; margin-bottom: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .option-item:active { background: #333; }
+
+        .btn-next { background: var(--main-red); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: bold; position: fixed; bottom: 20px; left: 0; width: calc(100% - 40px); margin: 0 20px; }
+        
+        /* Şəkil Yükləmə Bölməsi */
+        .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .photo-slot { aspect-ratio: 1; background: #2a2a2a; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 1px dashed #555; position: relative; }
     </style>
 </head>
 <body>
 
-<header>
-    <a href="#" class="logo">AVTO DÜNYA</a>
-    <i class="fa-regular fa-bell"></i>
-</header>
-
-<div class="filter-section">
-    <div class="grid-inputs">
-        <input type="text" id="searchMarka" placeholder="Marka və model">
-        <select id="searchCity">
-            <option>Bütün şəhərlər</option>
-            <option>Bakı</option>
-            <option>Gəncə</option>
-        </select>
-    </div>
-    <button class="add-btn-main" onclick="document.getElementById('uploadModal').style.display='block'">
-        <i class="fa-solid fa-plus"></i> YENİ ELAN
+<div style="padding: 20px;">
+    <button onclick="startWizard()" style="background:var(--main-red); color:white; border:none; padding:15px; border-radius:10px; width:100%; font-weight:bold;">
+        + YENİ ELAN YERLƏŞDİR
     </button>
 </div>
 
-<div class="car-container" id="carList">
-    <div class="car-card">
-        <img src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=400" alt="car">
-        <div class="car-info">
-            <div class="car-price">35 500 AZN</div>
-            <div class="car-model">Mercedes E-Class</div>
-            <div class="car-meta">2014, 2.2 L, 180 000 km</div>
-        </div>
+<div id="step1" class="step-container">
+    <div class="header-step"><i class="fa-solid fa-arrow-left back-btn" onclick="closeWizard()"></i> <h2>Markanı seçin</h2></div>
+    <div class="option-list">
+        <div class="option-item" onclick="nextStep(2, 'Mercedes')"><span>Mercedes</span> <i class="fa-solid fa-chevron-right"></i></div>
+        <div class="option-item" onclick="nextStep(2, 'BMW')"><span>BMW</span> <i class="fa-solid fa-chevron-right"></i></div>
+        <div class="option-item" onclick="nextStep(2, 'LADA')"><span>LADA (VAZ)</span> <i class="fa-solid fa-chevron-right"></i></div>
+        <div class="option-item" onclick="nextStep(2, 'Hyundai')"><span>Hyundai</span> <i class="fa-solid fa-chevron-right"></i></div>
     </div>
 </div>
 
-<div id="uploadModal">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2>Yeni Elan (Maks. 41 Şəkil)</h2>
-        <button onclick="document.getElementById('uploadModal').style.display='none'" style="background:none; border:none; color:white; font-size: 2rem;">&times;</button>
+<div id="step2" class="step-container">
+    <div class="header-step"><i class="fa-solid fa-arrow-left back-btn" onclick="prevStep(1)"></i> <h2>Buraxılış ili</h2></div>
+    <div class="option-list">
+        <div class="option-item" onclick="nextStep(3, '2024')">2024</div>
+        <div class="option-item" onclick="nextStep(3, '2023')">2023</div>
+        <div class="option-item" onclick="nextStep(3, '2022')">2022</div>
     </div>
-    <input type="text" id="modelInp" placeholder="Marka Model">
-    <input type="number" id="priceInp" placeholder="Qiymət (AZN)">
-    <input type="file" id="fileInp" accept="image/*" multiple>
-    <div id="progressStatus" style="margin: 10px 0; color: var(--main-red);"></div>
-    <button class="add-btn-main" onclick="handleUpload()">PAYLAŞ</button>
 </div>
 
-<nav class="bottom-nav">
-    <a href="#" class="nav-item active"><i class="fa-solid fa-house"></i>Əsas</a>
-    <a href="#" class="nav-item"><i class="fa-regular fa-heart"></i>Seçilmişlər</a>
-    <a href="#" class="nav-item"><i class="fa-regular fa-plus-square"></i>Yeni Elan</a>
-    <a href="#" class="nav-item"><i class="fa-regular fa-user"></i>Kabinet</a>
-</nav>
+<div id="step3" class="step-container">
+    <div class="header-step"><i class="fa-solid fa-arrow-left back-btn" onclick="prevStep(2)"></i> <h2>Şəkilləri əlavə et</h2></div>
+    <p style="font-size: 0.8rem; color: #aaa;">Minimum 3 şəkil (Ön, Arxa, Salon)</p>
+    <div class="photo-grid">
+        <div class="photo-slot" onclick="document.getElementById('multiFiles').click()"><i class="fa-solid fa-camera"></i></div>
+        <input type="file" id="multiFiles" hidden multiple accept="image/*" onchange="previewImages()">
+    </div>
+    <div id="imgStatus" style="margin-top:10px;"></div>
+    <button class="btn-next" onclick="finalStep()">PAYLAŞ</button>
+</div>
 
 <script>
-    async function handleUpload() {
-        const files = document.getElementById('fileInp').files;
-        const status = document.getElementById('progressStatus');
-        if(files.length === 0) return alert("Şəkil seçin!");
+    let elanData = { marka: '', il: '', seher: 'Bakı', qiymet: '', sekiller: [] };
+
+    function startWizard() { document.getElementById('step1').classList.add('active-step'); }
+    function closeWizard() { document.querySelectorAll('.step-container').forEach(s => s.classList.remove('active-step')); }
+    
+    function nextStep(stepNum, val) {
+        if(stepNum === 2) elanData.marka = val;
+        if(stepNum === 3) elanData.il = val;
         
-        status.innerText = "Yüklənir...";
-        let uploadedImages = [];
-        const apiKey = "6027a0066922d4f20f016499893d5904";
+        document.querySelectorAll('.step-container').forEach(s => s.classList.remove('active-step'));
+        document.getElementById('step' + stepNum).classList.add('active-step');
+    }
 
-        for(let i=0; i < files.length; i++) {
-            let formData = new FormData();
-            formData.append("image", files[i]);
-            try {
-                let res = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, { method: "POST", body: formData });
-                let data = await res.json();
-                uploadedImages.push(data.data.url);
-                status.innerText = `${i+1}/${files.length} şəkil hazır`;
-            } catch(e) { console.error(e); }
-        }
+    function prevStep(stepNum) {
+        document.querySelectorAll('.step-container').forEach(s => s.classList.remove('active-step'));
+        document.getElementById('step' + stepNum).classList.add('active-step');
+    }
 
-        if(uploadedImages.length > 0) {
-            alert("Elan AVTO DÜNYA botuna göndərildi!");
-            document.getElementById('uploadModal').style.display = 'none';
-        }
+    async function previewImages() {
+        const files = document.getElementById('multiFiles').files;
+        const status = document.getElementById('imgStatus');
+        status.innerText = files.length + " şəkil seçildi (Maks. 41)";
+    }
+
+    function finalStep() {
+        alert("⛩️ Təbriklər Ekoş! Elan bütün detalları və şəkilləri ilə birlikdə yoxlanışa göndərildi.");
+        closeWizard();
     }
 </script>
 
