@@ -3,66 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ekoş - Bot Təsdiqli Qeydiyyat</title>
+    <title>Ekoş Proyekt - Əsas Səhifə Girişli</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background-color: #000; color: #fff; font-family: sans-serif; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .auth-card { background: #1a1a1a; padding: 30px; border-radius: 20px; width: 90%; max-width: 350px; text-align: center; }
-        h2 { color: #E53935; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid #333; background: #222; color: white; outline: none; }
-        .btn-main { width: 100%; padding: 14px; background: #E53935; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .hidden { display: none; }
-        .status-msg { font-size: 12px; color: #4A89FF; margin-top: 10px; }
+        * { box-sizing: border-box; transition: 0.3s; }
+        body { background-color: #000; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; overflow-x: hidden; }
+
+        .page { display: none; min-height: 100vh; padding: 20px; padding-bottom: 100px; }
+        .page.active { display: block; }
+
+        /* Əsas Səhifə Üçün Elanlar Seti */
+        .feed { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .car-card { background: #1a1a1a; border-radius: 15px; overflow: hidden; }
+        .img-area { position: relative; height: 110px; background: #333; }
+        .card-info { padding: 10px; }
+        .price { font-weight: bold; font-size: 16px; color: #fff; }
+        .model { font-size: 13px; color: #ccc; margin: 3px 0; }
+        .details { font-size: 10px; color: #666; }
+
+        /* Qeydiyyat & Təsdiq */
+        .auth-container { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 80vh; }
+        .auth-card { background: #1a1a1a; width: 100%; max-width: 380px; padding: 30px; border-radius: 25px; text-align: center; }
+        input { width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 12px; border: 1px solid #333; background: #262626; color: white; outline: none; }
+        .btn-main { width: 100%; padding: 15px; background: #E53935; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
+
+        /* Kabinet Elementləri */
+        .header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 20px; }
+        .user-info { display: flex; align-items: center; }
+        .avatar { width: 50px; height: 50px; background: #333; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; }
+        .balance-card { background: #1a1a1a; padding: 20px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        
+        /* Aşağı Menyu */
+        .nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #111; display: flex; justify-content: space-around; align-items: center; padding: 10px 0 25px; border-top: 1px solid #222; z-index: 100; }
+        .nav-link { color: #666; text-decoration: none; font-size: 10px; text-align: center; flex: 1; cursor: pointer; }
+        .nav-link.active { color: #E53935; }
+        .nav-link i { display: block; font-size: 20px; margin-bottom: 4px; }
+        .center-wrap { position: relative; top: -15px; }
+        .add-btn { background: #E53935; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 25px; box-shadow: 0 5px 15px rgba(229, 57, 53, 0.4); }
     </style>
 </head>
 <body>
 
-    <div class="auth-card" id="step1">
-        <h2>Qeydiyyat</h2>
-        <input type="text" id="reg-name" placeholder="Adınız">
-        <input type="text" id="reg-phone" placeholder="Nömrə (məs: 0705175737)">
-        <button class="btn-main" onclick="sendVerification()">Kod Göndər</button>
-        <p class="status-msg">Bot nömrənizə təsdiq kodu göndərəcək.</p>
+    <div id="page-home" class="page active">
+        <h2 style="margin-top: 0;">Son Elanlar</h2>
+        <div class="feed">
+            <div class="car-card">
+                <div class="img-area"></div>
+                <div class="card-info">
+                    <div class="price">15 800 ₼</div>
+                    <div class="model">BMW 328</div>
+                    <div class="details">2014, 2.0 L, 180 000 km</div>
+                </div>
+            </div>
+            <div class="car-card">
+                <div class="img-area"></div>
+                <div class="card-info">
+                    <div class="price">24 500 ₼</div>
+                    <div class="model">Toyota Camry</div>
+                    <div class="details">2018, 2.5 L, 95 000 km</div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="auth-card hidden" id="step2">
-        <h2>Təsdiqlə</h2>
-        <p style="font-size: 13px; color: #888;">WhatsApp ilə göndərilən 4 rəqəmli kodu daxil edin</p>
-        <input type="number" id="verify-code" placeholder="0000">
-        <button class="btn-main" onclick="finishAuth()">Təsdiqlə və Giriş Et</button>
-        <p id="error-msg" style="color: red; font-size: 12px; margin-top: 10px;"></p>
+    <div id="page-reg" class="page">
+        <div class="auth-container">
+            <div class="auth-card">
+                <h2>Qeydiyyat</h2>
+                <p style="color:#888; font-size: 13px;">Davam etmək üçün qeydiyyatdan keçin</p>
+                <input type="text" id="user-name" placeholder="Adınız">
+                <input type="tel" id="user-phone" placeholder="Nömrə">
+                <button class="btn-main" onclick="showPage('page-otp')">Kod Göndər</button>
+            </div>
+        </div>
     </div>
+
+    <div id="page-otp" class="page">
+        <div class="auth-container">
+            <div class="auth-card">
+                <h2>Təsdiq Kodu</h2>
+                <input type="number" id="otp-code" placeholder="0000" style="text-align: center; font-size: 20px;">
+                <button class="btn-main" onclick="finalizeAuth()">Təsdiqlə</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="page-cabinet" class="page">
+        <div class="header">
+            <div class="user-info">
+                <div class="avatar"><i class="fa fa-user"></i></div>
+                <div id="profile-name" style="font-weight: bold;">İstifadəçi</div>
+            </div>
+            <i class="fa fa-cog"></i>
+        </div>
+        <div class="balance-card">
+            <div>
+                <div style="color: #888; font-size: 12px;">Balansınız</div>
+                <div style="font-size: 20px; font-weight: bold;">0,00 AZN</div>
+            </div>
+            <button style="background: #4A89FF; color: white; border: none; padding: 10px 15px; border-radius: 10px;">Artır</button>
+        </div>
+        <p style="color: #666;">Hələ ki elanınız yoxdur.</p>
+    </div>
+
+    <nav class="nav">
+        <div onclick="changeTab(this, 'page-home')" class="nav-link active"><i class="fa fa-home"></i>Əsas</div>
+        <div onclick="changeTab(this, 'page-home')" class="nav-link"><i class="fa fa-heart"></i>Seçilmişlər</div>
+        <div class="center-wrap">
+            <div class="add-btn">+</div>
+        </div>
+        <div onclick="changeTab(this, 'page-home')" class="nav-link"><i class="fa fa-comment"></i>Mesajlar</div>
+        <div onclick="changeTab(this, 'page-reg')" class="nav-link"><i class="fa fa-user"></i>Kabinet</div>
+    </nav>
 
     <script>
-        let generatedCode = "1234"; // Test üçün sabit kod (Normalda bot göndərəcək)
+        let isRegistered = false;
 
-        function sendVerification() {
-            const name = document.getElementById('reg-name').value;
-            const phone = document.getElementById('reg-phone').value;
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+        }
 
-            if(name && phone) {
-                // Burada API-yə sorğu göndərilir (Məsələn: Ultra-MD botuna)
-                // fetch(`https://api.yourbot.com/send?number=${phone}&message=Kodunuz:${generatedCode}`);
-                
-                alert(phone + " nömrəsinə WhatsApp kodu göndərildi! (Simulyasiya: 1234)");
-                
-                document.getElementById('step1').classList.add('hidden');
-                document.getElementById('step2').classList.remove('hidden');
+        function changeTab(element, pageId) {
+            // Menyu rənglərini tənzimlə
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            element.classList.add('active');
+
+            // Əgər qeydiyyatdan keçiblərsə və Kabinetə basırlarsa, birbaşa Kabineti aç
+            if(pageId === 'page-reg' && isRegistered) {
+                showPage('page-cabinet');
             } else {
-                alert("Zəhmət olmasa bütün xanaları doldurun!");
+                showPage(pageId);
             }
         }
 
-        function finishAuth() {
-            const inputCode = document.getElementById('verify-code').value;
-            if(inputCode === generatedCode) {
-                alert("Təbriklər! Qeydiyyat uğurla tamamlandı.");
-                window.location.reload(); // Realda bura Profil səhifəsinə yönləndirmə olacaq
-            } else {
-                document.getElementById('error-msg').innerText = "Kod yanlışdır! Yenidən yoxlayın.";
+        function finalizeAuth() {
+            const name = document.getElementById('user-name').value;
+            if(name) {
+                document.getElementById('profile-name').innerText = name;
+                isRegistered = true; // Qeydiyyat tamamlandı
+                showPage('page-cabinet');
+                // Menyu ikonunu aktiv et
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                document.querySelectorAll('.nav-link')[4].classList.add('active');
             }
         }
     </script>
-
 </body>
 </html>
