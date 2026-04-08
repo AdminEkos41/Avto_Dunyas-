@@ -3,135 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avto Dünya | Detallar</title>
+    <title>Kabinet Paneli</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --red: #ca1016; --bg: #121212; --card: #1d1d1d; --text: #a5a5a5; }
-        body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; overflow-x: hidden; }
-
-        /* Ana Səhifə Stili */
-        .car-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; }
-        .car-card { background: var(--card); border-radius: 12px; overflow: hidden; cursor: pointer; border: 1px solid #222; }
-        .car-card img { width: 100%; height: 120px; object-fit: cover; }
-        .car-info { padding: 10px; }
-        .car-price { font-size: 1.1rem; font-weight: bold; }
-
-        /* MƏLUMAT BÖLMƏSİ (Full Page Overlay) */
-        .details-page { 
-            display: none; 
-            position: fixed; 
-            top: 0; left: 0; width: 100%; height: 100%; 
-            background: var(--bg); 
-            z-index: 5000; 
-            overflow-y: auto; 
-            animation: slideUp 0.3s ease-out;
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            padding-bottom: 80px; /* Aşağı menyu üçün boşluq */
         }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-        .details-header { position: sticky; top: 0; background: rgba(18, 18, 18, 0.9); padding: 15px; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
-        .details-header i { font-size: 1.5rem; cursor: pointer; }
-
-        .main-img { width: 100%; height: 250px; object-fit: cover; }
-        
-        .details-content { padding: 20px; }
-        .d-price { font-size: 1.8rem; font-weight: bold; color: white; margin-bottom: 5px; }
-        .d-title { font-size: 1.2rem; margin-bottom: 15px; color: #eee; }
-
-        /* Parametrlər Cədvəli (Şəkildəki kimi) */
-        .info-grid { border-top: 1px solid #333; margin-top: 20px; }
-        .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #222; font-size: 14px; }
-        .info-label { color: var(--text); }
-        .info-value { color: white; font-weight: 500; }
-
-        /* Alt Zəng Düyməsi */
-        .call-bar { 
-            position: fixed; bottom: 0; width: 100%; 
-            background: #181818; padding: 15px; 
-            display: flex; gap: 10px; box-sizing: border-box;
-            border-top: 1px solid #333;
+        /* Üst hissə: İstifadəçi məlumatları */
+        .header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-        .call-btn { 
-            flex: 1; background: #28a745; color: white; 
-            border: none; padding: 15px; border-radius: 10px; 
-            font-weight: bold; font-size: 16px; 
-            display: flex; align-items: center; justify-content: center; gap: 10px;
+        .user-info {
+            display: flex;
+            align-items: center;
         }
-        .msg-btn { 
-            background: var(--red); color: white; 
-            border: none; padding: 15px; border-radius: 10px; width: 60px;
+        .avatar {
+            width: 60px;
+            height: 60px;
+            background-color: #333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+        .phone-number {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Balans Bölməsi */
+        .balance-card {
+            background-color: #1a1a1a;
+            margin: 10px 20px;
+            padding: 15px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .balance-text span {
+            color: #888;
+            font-size: 14px;
+        }
+        .balance-amount {
+            font-size: 20px;
+            font-weight: bold;
+            display: block;
+        }
+        .btn-add {
+            background-color: #4A89FF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+
+        /* Sürətli Keçid Düymələri */
+        .quick-actions {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+        }
+        .action-item {
+            text-align: center;
+            color: #ccc;
+            font-size: 13px;
+        }
+        .action-item i {
+            display: block;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        /* Tab Menyu */
+        .tabs {
+            display: flex;
+            overflow-x: auto;
+            padding: 10px 20px;
+            gap: 10px;
+        }
+        .tab {
+            background-color: #1a1a1a;
+            padding: 10px 15px;
+            border-radius: 20px;
+            white-space: nowrap;
+            font-size: 14px;
+            position: relative;
+        }
+        .tab.active {
+            background-color: #E53935;
+        }
+        .badge {
+            background-color: white;
+            color: black;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 5px;
+        }
+
+        /* Elan Kartı */
+        .card {
+            background-color: #000;
+            margin: 20px;
+            width: 180px;
+        }
+        .card-img-container {
+            position: relative;
+        }
+        .card img {
+            width: 100%;
+            border-radius: 15px;
+        }
+        .status-overlay {
+            position: absolute;
+            bottom: 10px;
+            left: 5px;
+            background: rgba(0,0,0,0.6);
+            padding: 3px 8px;
+            font-size: 11px;
+            border-radius: 5px;
+        }
+        .btn-restore {
+            width: 100%;
+            background-color: #e3f2fd;
+            color: #1976d2;
+            border: none;
+            padding: 8px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Aşağı Menyu */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #111;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0 20px 0;
+            border-top: 1px solid #222;
+        }
+        .nav-item {
+            text-align: center;
+            color: #888;
+            font-size: 11px;
+            flex: 1;
+        }
+        .nav-item.active {
+            color: #E53935;
+        }
+        .nav-item i {
+            font-size: 20px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .nav-item.center {
+            position: relative;
+            top: -15px;
+        }
+        .plus-btn {
+            background-color: #E53935;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 5px;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 4px 10px rgba(229, 57, 53, 0.4);
         }
     </style>
 </head>
 <body>
 
-<div id="homePage">
-    <div style="padding: 15px; font-weight: bold; font-size: 1.2rem; border-bottom: 1px solid #333;">Vip Elanlar</div>
-    <div class="car-container">
-        <div class="car-card" onclick="showDetails('Mercedes E-Class', '35 500 AZN', '2014', '2.2 L', 'Bakı')">
-            <img src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=500">
-            <div class="car-info">
-                <div class="car-price">35 500 AZN</div>
-                <div style="font-size: 14px; margin-top:5px;">Mercedes E-Class</div>
-                <div style="font-size: 12px; color: gray;">2014 • 2.2 L • Bakı</div>
-            </div>
+    <div class="header">
+        <div class="user-info">
+            <div class="avatar"><i class="fa fa-user fa-2x"></i></div>
+            <div class="phone-number">(070) 517-57-37</div>
         </div>
-    </div>
-</div>
-
-<div id="detailsPage" class="details-page">
-    <div class="details-header">
-        <i class="fa-solid fa-arrow-left" onclick="closeDetails()"></i>
-        <div>
-            <i class="fa-regular fa-heart" style="margin-right: 15px;"></i>
-            <i class="fa-solid fa-share-nodes"></i>
-        </div>
+        <i class="fa fa-cog fa-lg"></i>
     </div>
 
-    <img src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800" class="main-img">
-
-    <div class="details-content">
-        <div id="detPrice" class="d-price">35 500 AZN</div>
-        <div id="detTitle" class="d-title">Mercedes E-Class, 2014 il</div>
-
-        <div class="info-grid">
-            <div class="info-row"><span class="info-label">Şəhər</span> <span id="detCity" class="info-value">Bakı</span></div>
-            <div class="info-row"><span class="info-label">Marka</span> <span class="info-value">Mercedes</span></div>
-            <div class="info-row"><span class="info-label">Buraxılış ili</span> <span id="detYear" class="info-value">2014</span></div>
-            <div class="info-row"><span class="info-label">Mühərrik</span> <span id="detEngine" class="info-value">2.2 L</span></div>
-            <div class="info-row"><span class="info-label">Yanacaq növü</span> <span class="info-value">Dizel</span></div>
-            <div class="info-row"><span class="info-label">Sürətlər qutusu</span> <span class="info-value">Avtomat</span></div>
+    <div class="balance-card">
+        <div class="balance-text">
+            <span>Şəxsi hesab</span>
+            <span class="balance-amount">0,00 AZN</span>
         </div>
+        <button class="btn-add">Balansı artır</button>
+    </div>
 
-        <div style="margin-top: 20px; line-height: 1.6; color: #ccc; font-size: 14px;">
-            Maşın ideal vəziyyətdədir. Heç bir xərc tələb etmir. Real alıcıya endirim olacaq.
+    <div class="quick-actions">
+        <div class="action-item">
+            <i class="fa fa-list-alt"></i>
+            Əməliyyat tarixçəsi
+        </div>
+        <div class="action-item">
+            <i class="fa fa-wallet"></i>
+            Kartlarım
         </div>
     </div>
 
-    <div class="call-bar">
-        <button class="msg-btn"><i class="fa-regular fa-comment"></i></button>
-        <button class="call-btn" onclick="window.location.href='tel:+9940000000'">
-            <i class="fa-solid fa-phone"></i> Zəng et
-        </button>
+    <div class="tabs">
+        <div class="tab active">Bütün elanlar <span class="badge">1</span></div>
+        <div class="tab">Hazırda saytda</div>
+        <div class="tab">Müddəti başa çatmış <span class="badge">1</span></div>
     </div>
-</div>
 
-<script>
-    function showDetails(title, price, year, engine, city) {
-        document.getElementById('detTitle').innerText = title + ", " + year + " il";
-        document.getElementById('detPrice').innerText = price;
-        document.getElementById('detYear').innerText = year;
-        document.getElementById('detEngine').innerText = engine;
-        document.getElementById('detCity').innerText = city;
-        
-        document.getElementById('detailsPage').style.display = 'block';
-        document.body.style.overflow = 'hidden'; // Arxa fon sürüşməsin
-    }
+    <div class="card">
+        <div class="card-img-container">
+            <img src="https://via.placeholder.com/180x130/333/fff?text=Mercedes+C200" alt="Car">
+            <div class="status-overlay">Müddəti başa çatmış</div>
+        </div>
+        <button class="btn-restore">Bərpa et</button>
+        <p style="font-weight: bold; margin: 10px 0 5px 0;">7 700 ₼</p>
+        <p style="font-size: 13px; margin: 0; color: #ccc;">Mercedes C 200</p>
+        <p style="font-size: 11px; color: #888; margin-top: 5px;">2002, 1.8L, 390 000 km</p>
+    </div>
 
-    function closeDetails() {
-        document.getElementById('detailsPage').style.display = 'none';
-        document.body.style.overflow = 'auto';
-    }
-</script>
+    <div class="bottom-nav">
+        <div class="nav-item">
+            <i class="fa fa-home"></i>
+            Əsas
+        </div>
+        <div class="nav-item">
+            <i class="fa fa-heart"></i>
+            Seçilmişlər
+        </div>
+        <div class="nav-item center">
+            <div class="plus-btn">+</div>
+            <span>Yeni Elan</span>
+        </div>
+        <div class="nav-item">
+            <i class="fa fa-comment"></i>
+            Mesajlar
+        </div>
+        <div class="nav-item active">
+            <i class="fa fa-user"></i>
+            Kabinet
+        </div>
+    </div>
 
 </body>
-</html>
+    </html>
+    
