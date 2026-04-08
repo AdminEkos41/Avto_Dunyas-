@@ -1,138 +1,62 @@
-<!DOCTYPE html>
-<html lang="az">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avto Dünya | Yeni Elan</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root { --red: #ca1016; --bg: #121212; --card: #1d1d1d; --text: #a5a5a5; }
-        body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; overflow-x: hidden; }
-        
-        /* Elan Çubuğu (Progress Bar) */
-        .progress-container { position: fixed; top: 0; width: 100%; height: 4px; background: #333; z-index: 2000; }
-        #progressBar { height: 100%; width: 0%; background: var(--red); transition: 0.3s; }
-
-        .step-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); padding: 20px; box-sizing: border-box; overflow-y: auto; }
-        .active { display: block; animation: fadeIn 0.4s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .header { display: flex; align-items: center; margin-bottom: 25px; border-bottom: 1px solid #333; padding-bottom: 15px; }
-        .back-btn { font-size: 1.5rem; margin-right: 20px; color: var(--text); }
-        
-        .list-item { background: var(--card); padding: 18px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .list-item:hover { background: #252525; }
-
-        input[type="number"], input[type="text"], textarea { background: var(--card); border: 1px solid #333; color: white; padding: 15px; width: 100%; border-radius: 10px; margin-bottom: 15px; box-sizing: border-box; }
-        
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .tag-btn { background: var(--card); padding: 12px; border-radius: 8px; text-align: center; font-size: 0.9rem; border: 1px solid #333; }
-        .tag-btn.selected { border-color: var(--red); color: var(--red); }
-
-        .footer-btn { position: fixed; bottom: 20px; left: 20px; right: 20px; background: var(--red); color: white; border: none; padding: 18px; border-radius: 12px; font-weight: bold; font-size: 1rem; }
-    </style>
-</head>
-<body>
-
-<div class="progress-container"><div id="progressBar"></div></div>
-
-<div id="step1" class="step-page active">
-    <div class="header"><h2>Yeni elan</h2></div>
-    <p>Kateqoriyanı seçin</p>
-    <div class="list-item" onclick="goNext(2)"><span><i class="fa-solid fa-car"></i> Minik</span> <i class="fa-solid fa-chevron-right"></i></div>
-    <div class="list-item" onclick="goNext(2)"><span><i class="fa-solid fa-truck"></i> Kommersiya</span> <i class="fa-solid fa-chevron-right"></i></div>
-</div>
-
-<div id="step2" class="step-page">
-    <div class="header"><i class="fa-solid fa-arrow-left back-btn" onclick="goBack(1)"></i> <h2>Markanı seçin</h2></div>
-    <div class="list-item" onclick="goNext(3)">Mercedes</div>
-    <div class="list-item" onclick="goNext(3)">BMW</div>
-    <div class="list-item" onclick="goNext(3)">Toyota</div>
-    <div class="list-item" onclick="goNext(3)">LADA (VAZ)</div>
-</div>
-
-<div id="step3" class="step-page">
-    <div class="header"><i class="fa-solid fa-arrow-left back-btn" onclick="goBack(2)"></i> <h2>Buraxılış ili</h2></div>
-    <div id="yearList" class="option-list"></div>
-</div>
-
-<div id="step4" class="step-page">
-    <div class="header"><i class="fa-solid fa-arrow-left back-btn" onclick="goBack(3)"></i> <h2>Ban növü</h2></div>
-    <div class="list-item" onclick="goNext(5)">Sedan</div>
-    <div class="list-item" onclick="goNext(5)">Ofrouder / SUV</div>
-    <div class="list-item" onclick="goNext(5)">Hetçbek</div>
-</div>
-
-<div id="step5" class="step-page">
-    <div class="header"><i class="fa-solid fa-arrow-left back-btn" onclick="goBack(4)"></i> <h2>Mühərrik</h2></div>
-    <div class="grid-3">
-        <div class="tag-btn" onclick="goNext(6)">Benzin</div>
-        <div class="tag-btn" onclick="goNext(6)">Dizel</div>
-        <div class="tag-btn" onclick="goNext(6)">Hibrid</div>
-    </div>
-</div>
-
-<div id="step6" class="step-page">
-    <div class="header"><i class="fa-solid fa-arrow-left back-btn" onclick="goBack(5)"></i> <h2>Detallar</h2></div>
-    <input type="number" placeholder="Yürüş, km">
-    <input type="number" placeholder="Qiymət, AZN">
-    <textarea rows="5" placeholder="Təsvir (Məlumat yazın...)"></textarea>
-    <button class="footer-btn" onclick="goNext(7)">Davam et</button>
-</div>
-
-<div id="step7" class="step-page">
-    <div class="header"><i class="fa-solid fa-arrow-left back-btn" onclick="goBack(6)"></i> <h2>Şəkillər (Max 41)</h2></div>
-    <div style="text-align: center; padding: 40px; border: 2px dashed #333; border-radius: 15px;" onclick="document.getElementById('fileInp').click()">
-        <i class="fa-solid fa-camera" style="font-size: 3rem; color: var(--red);"></i>
-        <p>Şəkil əlavə etmək üçün toxunun</p>
-    </div>
-    <input type="file" id="fileInp" hidden multiple accept="image/*" onchange="updatePhotoCount()">
-    <div id="photoStatus" style="margin-top: 15px; color: var(--text);"></div>
-    <button class="footer-btn" onclick="finish()">ELANI PAYLAŞ</button>
-</div>
-
-<script>
-    let currentStep = 1;
-    const totalSteps = 7;
-
-    // İl siyahısını avtomatik yaradır (1950-2026)
-    const yearList = document.getElementById('yearList');
-    for (let i = 2026; i >= 1950; i--) {
-        let div = document.createElement('div');
-        div.className = 'list-item';
-        div.innerText = i;
-        div.onclick = () => goNext(4);
-        yearList.appendChild(div);
+<style>
+    /* Alt Menyu Dizaynı */
+    .bottom-nav { 
+        position: fixed; 
+        bottom: 0; 
+        left: 0;
+        width: 100%; 
+        background: #181818; 
+        display: flex; 
+        justify-content: space-around; 
+        padding: 12px 0; 
+        border-top: 1px solid #333; 
+        z-index: 3000;
+    }
+    
+    .nav-item { 
+        color: #a5a5a5; 
+        text-align: center; 
+        text-decoration: none; 
+        font-size: 11px;
+        transition: 0.2s;
+        flex: 1;
+    }
+    
+    .nav-item i { 
+        font-size: 20px; 
+        display: block; 
+        margin-bottom: 5px; 
+    }
+    
+    /* Aktiv olan bölmə qırmızı rəngdə */
+    .nav-item.active { 
+        color: #ca1016; 
     }
 
-    function updateProgress() {
-        let percent = ((currentStep - 1) / (totalSteps - 1)) * 100;
-        document.getElementById('progressBar').style.width = percent + "%";
+    .nav-item:active {
+        transform: scale(0.9);
     }
+</style>
 
-    function goNext(step) {
-        document.getElementById('step' + currentStep).classList.remove('active');
-        currentStep = step;
-        document.getElementById('step' + currentStep).classList.add('active');
-        updateProgress();
-    }
-
-    function goBack(step) {
-        document.getElementById('step' + currentStep).classList.remove('active');
-        currentStep = step;
-        document.getElementById('step' + currentStep).classList.add('active');
-        updateProgress();
-    }
-
-    function updatePhotoCount() {
-        const count = document.getElementById('fileInp').files.length;
-        document.getElementById('photoStatus').innerText = count + " şəkil seçildi (Maks 41).";
-    }
-
-    function finish() {
-        alert("⛩️ Ekoş, bütün 16 mərhələli məntiq işə düşdü! Elan AVTO DÜNYA sisteminə uğurla yükləndi.");
-    }
-</script>
-
-</body>
-</html>
+<nav class="bottom-nav">
+    <a href="#" class="nav-item active">
+        <i class="fa-solid fa-house"></i>
+        <span>Əsas</span>
+    </a>
+    <a href="#" class="nav-item">
+        <i class="fa-regular fa-heart"></i>
+        <span>Seçilmişlər</span>
+    </a>
+    <a href="#" class="nav-item" onclick="startWizard()">
+        <i class="fa-regular fa-plus-square"></i>
+        <span>Yeni Elan</span>
+    </a>
+    <a href="#" class="nav-item">
+        <i class="fa-regular fa-comment"></i>
+        <span>Mesajlar</span>
+    </a>
+    <a href="#" class="nav-item">
+        <i class="fa-regular fa-user"></i>
+        <span>Kabinet</span>
+    </a>
+</nav>
