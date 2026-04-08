@@ -3,263 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kabinet Paneli</title>
+    <title>Ekoş Proyekt - Tam İnterfeys</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        * { box-sizing: border-box; }
         body {
             background-color: #000;
             color: #fff;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 0;
-            padding-bottom: 80px; /* Aşağı menyu üçün boşluq */
+            padding-bottom: 80px;
         }
 
-        /* Üst hissə: İstifadəçi məlumatları */
-        .header {
-            padding: 20px;
+        /* --- QEYDİYYAT SƏHİFƏSİ --- */
+        #auth-page {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .user-info {
-            display: flex;
-            align-items: center;
-        }
-        .avatar {
-            width: 60px;
-            height: 60px;
-            background-color: #333;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            margin-right: 15px;
-        }
-        .phone-number {
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        /* Balans Bölməsi */
-        .balance-card {
-            background-color: #1a1a1a;
-            margin: 10px 20px;
-            padding: 15px;
-            border-radius: 15px;
-            display: flex;
-            justify-content: space-between;
             align-items: center;
+            height: 100vh;
+            padding: 20px;
         }
-        .balance-text span {
-            color: #888;
-            font-size: 14px;
+        .auth-card {
+            background: #1a1a1a;
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
         }
-        .balance-amount {
-            font-size: 20px;
-            font-weight: bold;
-            display: block;
+        .auth-card h2 { color: #E53935; margin-bottom: 20px; }
+        .input-group { margin-bottom: 15px; text-align: left; }
+        input {
+            width: 100%;
+            padding: 12px;
+            background: #333;
+            border: 1px solid #444;
+            border-radius: 10px;
+            color: white;
+            outline: none;
         }
-        .btn-add {
-            background-color: #4A89FF;
+        .btn-main {
+            width: 100%;
+            padding: 14px;
+            background: #E53935;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-weight: bold;
-        }
-
-        /* Sürətli Keçid Düymələri */
-        .quick-actions {
-            display: flex;
-            justify-content: space-around;
-            padding: 20px;
-        }
-        .action-item {
-            text-align: center;
-            color: #ccc;
-            font-size: 13px;
-        }
-        .action-item i {
-            display: block;
-            font-size: 24px;
-            margin-bottom: 8px;
-        }
-
-        /* Tab Menyu */
-        .tabs {
-            display: flex;
-            overflow-x: auto;
-            padding: 10px 20px;
-            gap: 10px;
-        }
-        .tab {
-            background-color: #1a1a1a;
-            padding: 10px 15px;
-            border-radius: 20px;
-            white-space: nowrap;
-            font-size: 14px;
-            position: relative;
-        }
-        .tab.active {
-            background-color: #E53935;
-        }
-        .badge {
-            background-color: white;
-            color: black;
-            font-size: 10px;
-            padding: 2px 6px;
             border-radius: 10px;
-            margin-left: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
         }
+
+        /* --- KABİNET SƏHİFƏSİ (Gizli başlayır) --- */
+        #profile-page { display: none; }
+
+        .header { padding: 20px; display: flex; align-items: center; justify-content: space-between; }
+        .user-info { display: flex; align-items: center; }
+        .avatar {
+            width: 55px; height: 55px; background: #333;
+            border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; margin-right: 15px;
+        }
+        
+        .balance-card {
+            background: #1a1a1a; margin: 10px 20px; padding: 15px;
+            border-radius: 15px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .balance-amount { font-size: 20px; font-weight: bold; display: block; }
+        .btn-topup { background: #4A89FF; color: white; border: none; padding: 10px 18px; border-radius: 10px; font-weight: bold; }
+
+        .quick-actions { display: flex; justify-content: space-around; padding: 20px; border-bottom: 1px solid #222; }
+        .action-item { text-align: center; color: #ccc; font-size: 12px; }
+        .action-item i { display: block; font-size: 22px; margin-bottom: 8px; }
+
+        .tabs { display: flex; padding: 15px 20px; gap: 10px; overflow-x: auto; }
+        .tab { background: #1a1a1a; padding: 8px 15px; border-radius: 20px; font-size: 13px; white-space: nowrap; }
+        .tab.active { background: #E53935; }
 
         /* Elan Kartı */
-        .card {
-            background-color: #000;
-            margin: 20px;
-            width: 180px;
-        }
-        .card-img-container {
-            position: relative;
-        }
-        .card img {
-            width: 100%;
-            border-radius: 15px;
-        }
-        .status-overlay {
-            position: absolute;
-            bottom: 10px;
-            left: 5px;
-            background: rgba(0,0,0,0.6);
-            padding: 3px 8px;
-            font-size: 11px;
-            border-radius: 5px;
-        }
-        .btn-restore {
-            width: 100%;
-            background-color: #e3f2fd;
-            color: #1976d2;
-            border: none;
-            padding: 8px;
-            border-radius: 8px;
-            margin-top: 10px;
-            font-weight: bold;
-        }
+        .card { background: #000; margin: 20px; width: 170px; }
+        .card-img { position: relative; border-radius: 12px; overflow: hidden; }
+        .card-img img { width: 100%; display: block; }
+        .badge-status { position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.7); font-size: 10px; padding: 4px 8px; border-radius: 4px; }
+        .btn-action { width: 100%; background: #e3f2fd; color: #1976d2; border: none; padding: 10px; border-radius: 8px; margin-top: 10px; font-weight: bold; }
 
-        /* Aşağı Menyu */
+        /* --- AŞAĞI MENYU --- */
         .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background-color: #111;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 10px 0 20px 0;
-            border-top: 1px solid #222;
+            position: fixed; bottom: 0; width: 100%; background: #111;
+            display: flex; justify-content: space-around; align-items: center;
+            padding: 10px 0 15px 0; border-top: 1px solid #222;
         }
-        .nav-item {
-            text-align: center;
-            color: #888;
-            font-size: 11px;
-            flex: 1;
-        }
-        .nav-item.active {
-            color: #E53935;
-        }
-        .nav-item i {
-            font-size: 20px;
-            display: block;
-            margin-bottom: 4px;
-        }
-        .nav-item.center {
-            position: relative;
-            top: -15px;
-        }
-        .plus-btn {
-            background-color: #E53935;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 5px;
-            color: white;
-            font-size: 24px;
-            box-shadow: 0 4px 10px rgba(229, 57, 53, 0.4);
+        .nav-item { text-align: center; color: #888; font-size: 10px; flex: 1; text-decoration: none; }
+        .nav-item.active { color: #E53935; }
+        .nav-item i { font-size: 20px; display: block; margin-bottom: 4px; }
+        .center-btn { position: relative; top: -15px; }
+        .plus-icon {
+            background: #E53935; width: 50px; height: 50px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 5px; color: white; font-size: 24px;
+            box-shadow: 0 4px 12px rgba(229, 57, 53, 0.4);
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="user-info">
-            <div class="avatar"><i class="fa fa-user fa-2x"></i></div>
-            <div class="phone-number">(070) 517-57-37</div>
-        </div>
-        <i class="fa fa-cog fa-lg"></i>
-    </div>
-
-    <div class="balance-card">
-        <div class="balance-text">
-            <span>Şəxsi hesab</span>
-            <span class="balance-amount">0,00 AZN</span>
-        </div>
-        <button class="btn-add">Balansı artır</button>
-    </div>
-
-    <div class="quick-actions">
-        <div class="action-item">
-            <i class="fa fa-list-alt"></i>
-            Əməliyyat tarixçəsi
-        </div>
-        <div class="action-item">
-            <i class="fa fa-wallet"></i>
-            Kartlarım
+    <div id="auth-page">
+        <div class="auth-card">
+            <h2>Xoş Gəlmisən</h2>
+            <div class="input-group">
+                <input type="text" id="username" placeholder="İstifadəçi adı">
+            </div>
+            <div class="input-group">
+                <input type="email" placeholder="E-poçt ünvanı">
+            </div>
+            <div class="input-group">
+                <input type="password" placeholder="Şifrə">
+            </div>
+            <button class="btn-main" onclick="goToProfile()">Qeydiyyatı Tamamla</button>
         </div>
     </div>
 
-    <div class="tabs">
-        <div class="tab active">Bütün elanlar <span class="badge">1</span></div>
-        <div class="tab">Hazırda saytda</div>
-        <div class="tab">Müddəti başa çatmış <span class="badge">1</span></div>
+    <div id="profile-page">
+        <div class="header">
+            <div class="user-info">
+                <div class="avatar"><i class="fa fa-user fa-xl"></i></div>
+                <div class="phone-number" id="display-name">(070) 517-57-37</div>
+            </div>
+            <i class="fa fa-cog fa-lg"></i>
+        </div>
+
+        <div class="balance-card">
+            <div>
+                <span style="color: #888; font-size: 13px;">Şəxsi hesab</span>
+                <span class="balance-amount">0,00 AZN</span>
+            </div>
+            <button class="btn-topup">Balansı artır</button>
+        </div>
+
+        <div class="quick-actions">
+            <div class="action-item"><i class="fa fa-history"></i>Əməliyyat tarixçəsi</div>
+            <div class="action-item"><i class="fa fa-credit-card"></i>Kartlarım</div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active">Bütün elanlar 1</div>
+            <div class="tab">Hazırda saytda</div>
+            <div class="tab">Müddəti başa çatmış 1</div>
+        </div>
+
+        <div class="card">
+            <div class="card-img">
+                <img src="https://via.placeholder.com/200x140/222/fff?text=Mercedes+C200" alt="Car">
+                <div class="badge-status">Müddəti başa çatmış</div>
+            </div>
+            <button class="btn-action">Bərpa et</button>
+            <div style="padding: 10px 0;">
+                <div style="font-weight: bold; font-size: 18px;">7 700 ₼</div>
+                <div style="font-size: 14px; color: #ccc;">Mercedes C 200</div>
+                <div style="font-size: 11px; color: #777;">2002, 1.8L, 390 000 km</div>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <a href="#" class="nav-item"><i class="fa fa-home"></i>Əsas</a>
+            <a href="#" class="nav-item"><i class="fa fa-heart"></i>Seçilmişlər</a>
+            <div class="nav-item center-btn">
+                <div class="plus-icon">+</div>
+                <span>Yeni Elan</span>
+            </div>
+            <a href="#" class="nav-item"><i class="fa fa-comment"></i>Mesajlar</a>
+            <a href="#" class="nav-item active"><i class="fa fa-user"></i>Kabinet</a>
+        </div>
     </div>
 
-    <div class="card">
-        <div class="card-img-container">
-            <img src="https://via.placeholder.com/180x130/333/fff?text=Mercedes+C200" alt="Car">
-            <div class="status-overlay">Müddəti başa çatmış</div>
-        </div>
-        <button class="btn-restore">Bərpa et</button>
-        <p style="font-weight: bold; margin: 10px 0 5px 0;">7 700 ₼</p>
-        <p style="font-size: 13px; margin: 0; color: #ccc;">Mercedes C 200</p>
-        <p style="font-size: 11px; color: #888; margin-top: 5px;">2002, 1.8L, 390 000 km</p>
-    </div>
-
-    <div class="bottom-nav">
-        <div class="nav-item">
-            <i class="fa fa-home"></i>
-            Əsas
-        </div>
-        <div class="nav-item">
-            <i class="fa fa-heart"></i>
-            Seçilmişlər
-        </div>
-        <div class="nav-item center">
-            <div class="plus-btn">+</div>
-            <span>Yeni Elan</span>
-        </div>
-        <div class="nav-item">
-            <i class="fa fa-comment"></i>
-            Mesajlar
-        </div>
-        <div class="nav-item active">
-            <i class="fa fa-user"></i>
-            Kabinet
-        </div>
-    </div>
-
+    <script>
+        function goToProfile() {
+            const name = document.getElementById('username').value;
+            if(name) {
+                // Adı kabinetdə göstər
+                document.getElementById('display-name').innerText = name;
+                // Səhifələri dəyiş
+                document.getElementById('auth-page').style.display = 'none';
+                document.getElementById('profile-page').style.display = 'block';
+                document.body.style.backgroundColor = '#000';
+            } else {
+                alert("Zəhmət olmasa istifadəçi adını daxil edin!");
+            }
+        }
+    </script>
 </body>
-    </html>
-    
+</html>
