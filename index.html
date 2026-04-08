@@ -1,62 +1,71 @@
 <style>
-    /* Alt Menyu Dizaynı */
-    .bottom-nav { 
-        position: fixed; 
-        bottom: 0; 
-        left: 0;
-        width: 100%; 
-        background: #181818; 
-        display: flex; 
-        justify-content: space-around; 
-        padding: 12px 0; 
-        border-top: 1px solid #333; 
-        z-index: 3000;
+    /* Üst Filter Düymələri */
+    .quick-filters {
+        display: flex;
+        gap: 10px;
+        padding: 10px 15px;
+        overflow-x: auto;
+        white-space: nowrap;
+        scrollbar-width: none; /* Firefox üçün */
     }
-    
-    .nav-item { 
-        color: #a5a5a5; 
-        text-align: center; 
-        text-decoration: none; 
-        font-size: 11px;
-        transition: 0.2s;
-        flex: 1;
-    }
-    
-    .nav-item i { 
-        font-size: 20px; 
-        display: block; 
-        margin-bottom: 5px; 
-    }
-    
-    /* Aktiv olan bölmə qırmızı rəngdə */
-    .nav-item.active { 
-        color: #ca1016; 
-    }
+    .quick-filters::-webkit-scrollbar { display: none; } /* Chrome üçün */
 
-    .nav-item:active {
-        transform: scale(0.9);
+    .filter-pill {
+        background: #222;
+        color: white;
+        padding: 8px 18px;
+        border-radius: 20px;
+        font-size: 13px;
+        border: 1px solid #333;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
     }
+    .filter-pill.active {
+        background: white;
+        color: black;
+        font-weight: bold;
+    }
+    .filter-pill i { font-size: 14px; }
+
+    /* Kredit/Barter Düymələri (Şəkildəki kimi yan-yana) */
+    .action-row {
+        display: flex;
+        gap: 10px;
+        padding: 0 15px 15px 15px;
+    }
+    .action-btn {
+        flex: 1;
+        background: #1d1d1d;
+        color: white;
+        border: 1px solid #333;
+        padding: 12px;
+        border-radius: 10px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+    .action-btn i { color: #ca1016; } /* İkonlar qırmızı */
 </style>
 
-<nav class="bottom-nav">
-    <a href="#" class="nav-item active">
-        <i class="fa-solid fa-house"></i>
-        <span>Əsas</span>
-    </a>
-    <a href="#" class="nav-item">
-        <i class="fa-regular fa-heart"></i>
-        <span>Seçilmişlər</span>
-    </a>
-    <a href="#" class="nav-item" onclick="startWizard()">
-        <i class="fa-regular fa-plus-square"></i>
-        <span>Yeni Elan</span>
-    </a>
-    <a href="#" class="nav-item">
-        <i class="fa-regular fa-comment"></i>
-        <span>Mesajlar</span>
-    </a>
-    <a href="#" class="nav-item">
-        <i class="fa-regular fa-user"></i>
-        <span>Kabinet</span>
-    </a>
-</nav>
+<div class="quick-filters">
+    <div class="filter-pill active">Hamısı</div>
+    <div class="filter-pill"><i class="fa-solid fa-percent"></i> Kredit</div>
+    <div class="filter-pill"><i class="fa-solid fa-arrows-rotate"></i> Barter</div>
+    <div class="filter-pill">Ehtiyat hissələri</div>
+    <div class="filter-pill">Aksesuarlar</div>
+</div>
+
+<div class="action-row">
+    <div class="action-btn">
+        <i class="fa-solid fa-sliders"></i>
+        Filtrlər
+    </div>
+    <div class="action-btn">
+        <i class="fa-solid fa-arrow-down-wide-short"></i>
+        Tarixə görə
+    </div>
+</div>
