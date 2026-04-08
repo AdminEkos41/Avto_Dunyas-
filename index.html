@@ -3,164 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avto Dünya | Premium</title>
+    <title>Avto Dünya | Detallar</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --red: #ca1016; --bg: #121212; --card: #1d1d1d; --text: #a5a5a5; }
-        body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; overflow-x: hidden; padding-bottom: 100px; }
-        
-        /* Header */
-        header { background: var(--bg); padding: 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 100; }
-        .logo { color: var(--red); font-weight: bold; font-size: 1.5rem; text-decoration: none; text-transform: uppercase; }
+        body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; overflow-x: hidden; }
 
-        /* Yekəldilmiş Üst Filterlər (Sənin şəkildəki kimi) */
-        .quick-filters { display: flex; gap: 12px; padding: 20px 15px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
-        .quick-filters::-webkit-scrollbar { display: none; }
-        .filter-pill { background: #222; color: white; padding: 14px 24px; border-radius: 30px; font-size: 16px; border: 1px solid #333; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: 0.2s; }
-        .filter-pill.active { background: white; color: black; font-weight: bold; border-color: white; }
-
-        /* Videodakı Ağ Filtir Bölməsi (Tam oxşar) */
-        .action-row { display: flex; gap: 10px; padding: 0 15px 15px; }
-        .action-btn { 
-            flex: 1; 
-            background: white; 
-            color: #333; 
-            border: 1px solid #e0e0e0; 
-            padding: 12px; 
-            border-radius: 10px; 
-            font-size: 14px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 8px; 
-            font-weight: 600;
-        }
-        .action-btn i { color: #666; font-size: 16px; }
-
-        /* Elan Kartları */
-        .car-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px; }
-        .car-card { background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid #222; }
+        /* Ana Səhifə Stili */
+        .car-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; }
+        .car-card { background: var(--card); border-radius: 12px; overflow: hidden; cursor: pointer; border: 1px solid #222; }
         .car-card img { width: 100%; height: 120px; object-fit: cover; }
         .car-info { padding: 10px; }
         .car-price { font-size: 1.1rem; font-weight: bold; }
-        .car-meta { font-size: 0.8rem; color: var(--text); margin-top: 4px; }
 
-        /* Addım-Addım Elan Paneli */
-        .step-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); padding: 20px; box-sizing: border-box; overflow-y: auto; z-index: 4000; }
-        .active { display: block; animation: slideIn 0.3s ease-out; }
-        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        /* MƏLUMAT BÖLMƏSİ (Full Page Overlay) */
+        .details-page { 
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; width: 100%; height: 100%; 
+            background: var(--bg); 
+            z-index: 5000; 
+            overflow-y: auto; 
+            animation: slideUp 0.3s ease-out;
+        }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+        .details-header { position: sticky; top: 0; background: rgba(18, 18, 18, 0.9); padding: 15px; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
+        .details-header i { font-size: 1.5rem; cursor: pointer; }
+
+        .main-img { width: 100%; height: 250px; object-fit: cover; }
         
-        .step-header { display: flex; align-items: center; margin-bottom: 25px; border-bottom: 1px solid #333; padding-bottom: 15px; }
-        .back-btn { font-size: 1.5rem; margin-right: 20px; color: var(--text); border: none; background: none; }
-        .list-item { background: var(--card); padding: 18px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #222; }
+        .details-content { padding: 20px; }
+        .d-price { font-size: 1.8rem; font-weight: bold; color: white; margin-bottom: 5px; }
+        .d-title { font-size: 1.2rem; margin-bottom: 15px; color: #eee; }
 
-        /* Alt Menyu */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #181818; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #333; z-index: 1000; }
-        .nav-item { color: var(--text); text-align: center; text-decoration: none; font-size: 11px; flex: 1; }
-        .nav-item i { font-size: 20px; display: block; margin-bottom: 5px; }
-        .nav-item.active { color: var(--red); }
+        /* Parametrlər Cədvəli (Şəkildəki kimi) */
+        .info-grid { border-top: 1px solid #333; margin-top: 20px; }
+        .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #222; font-size: 14px; }
+        .info-label { color: var(--text); }
+        .info-value { color: white; font-weight: 500; }
 
-        /* Qırmızı "+" Düyməsi */
-        .plus-btn-wrap { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); z-index: 1001; }
-        .plus-btn { background: var(--red); color: white; border: none; width: 65px; height: 65px; border-radius: 50%; font-size: 30px; box-shadow: 0 4px 15px rgba(202,16,22,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        /* Alt Zəng Düyməsi */
+        .call-bar { 
+            position: fixed; bottom: 0; width: 100%; 
+            background: #181818; padding: 15px; 
+            display: flex; gap: 10px; box-sizing: border-box;
+            border-top: 1px solid #333;
+        }
+        .call-btn { 
+            flex: 1; background: #28a745; color: white; 
+            border: none; padding: 15px; border-radius: 10px; 
+            font-weight: bold; font-size: 16px; 
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .msg-btn { 
+            background: var(--red); color: white; 
+            border: none; padding: 15px; border-radius: 10px; width: 60px;
+        }
     </style>
 </head>
 <body>
 
-<header>
-    <a href="#" class="logo">AVTO DÜNYA</a>
-    <i class="fa-regular fa-bell"></i>
-</header>
-
-<div id="mainContent">
-    <div class="quick-filters">
-        <div class="filter-pill active">Hamısı</div>
-        <div class="filter-pill"><i class="fa-solid fa-percent"></i> Kredit</div>
-        <div class="filter-pill"><i class="fa-solid fa-arrows-rotate"></i> Barter</div>
-    </div>
-
-    <div class="action-row">
-        <div class="action-btn">
-            <i class="fa-solid fa-sliders"></i>
-            Filtrlər
-        </div>
-        <div class="action-btn">
-            <i class="fa-solid fa-arrow-down-wide-short"></i>
-            Tarixə görə
-        </div>
-    </div>
-
+<div id="homePage">
+    <div style="padding: 15px; font-weight: bold; font-size: 1.2rem; border-bottom: 1px solid #333;">Vip Elanlar</div>
     <div class="car-container">
-        <div class="car-card">
-            <img src="https://images.unsplash.com/photo-1617469767053-d3b523a0b982?w=400">
-            <div class="car-info">
-                <div class="car-price">42 700 AZN</div>
-                <div class="car-model">BMW 528</div>
-                <div class="car-meta">2015, 2.0 L, Bakı</div>
-            </div>
-        </div>
-        <div class="car-card">
-            <img src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=400">
+        <div class="car-card" onclick="showDetails('Mercedes E-Class', '35 500 AZN', '2014', '2.2 L', 'Bakı')">
+            <img src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=500">
             <div class="car-info">
                 <div class="car-price">35 500 AZN</div>
-                <div class="car-model">Mercedes E-Class</div>
-                <div class="car-meta">2014, 2.2 L, Bakı</div>
+                <div style="font-size: 14px; margin-top:5px;">Mercedes E-Class</div>
+                <div style="font-size: 12px; color: gray;">2014 • 2.2 L • Bakı</div>
             </div>
         </div>
     </div>
 </div>
 
-<div id="step1" class="step-page">
-    <div class="step-header"><button class="back-btn" onclick="closeWizard()">×</button> <h2>Yeni elan</h2></div>
-    <div class="list-item" onclick="goNext(2)"><span>Minik Maşınları</span> <i class="fa-solid fa-chevron-right"></i></div>
-    <div class="list-item" onclick="goNext(2)"><span>Kommersiya</span> <i class="fa-solid fa-chevron-right"></i></div>
-</div>
-
-<div id="step2" class="step-page">
-    <div class="step-header"><button class="back-btn" onclick="goBack(1)">←</button> <h2>Marka</h2></div>
-    <div class="list-item" onclick="goNext(3)">Mercedes</div>
-    <div class="list-item" onclick="goNext(3)">BMW</div>
-    <div class="list-item" onclick="goNext(3)">Toyota</div>
-</div>
-
-<div id="step3" class="step-page">
-    <div class="step-header"><button class="back-btn" onclick="goBack(2)">←</button> <h2>Şəkillər</h2></div>
-    <div style="text-align:center; padding:50px; border:2px dashed #333; border-radius:15px;" onclick="document.getElementById('fileInp').click()">
-        <i class="fa-solid fa-camera" style="font-size:3rem; color:var(--red);"></i>
-        <p>Şəkil əlavə edin (Maks 41)</p>
+<div id="detailsPage" class="details-page">
+    <div class="details-header">
+        <i class="fa-solid fa-arrow-left" onclick="closeDetails()"></i>
+        <div>
+            <i class="fa-regular fa-heart" style="margin-right: 15px;"></i>
+            <i class="fa-solid fa-share-nodes"></i>
+        </div>
     </div>
-    <input type="file" id="fileInp" hidden multiple accept="image/*">
-    <button style="position:fixed; bottom:20px; left:20px; right:20px; background:var(--red); color:white; border:none; padding:18px; border-radius:12px; font-weight:bold;" onclick="finish()">ELANI PAYLAŞ</button>
-</div>
 
-<nav class="bottom-nav">
-    <a href="#" class="nav-item active"><i class="fa-solid fa-house"></i><span>Əsas</span></a>
-    <a href="#" class="nav-item"><i class="fa-regular fa-heart"></i><span>Seçilmişlər</span></a>
-    <div style="width: 70px;"></div>
-    <a href="#" class="nav-item"><i class="fa-regular fa-comment"></i><span>Mesajlar</span></a>
-    <a href="#" class="nav-item"><i class="fa-regular fa-user"></i><span>Kabinet</span></a>
-</nav>
+    <img src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800" class="main-img">
 
-<div class="plus-btn-wrap">
-    <button class="plus-btn" onclick="startWizard()"><i class="fa-solid fa-plus"></i></button>
+    <div class="details-content">
+        <div id="detPrice" class="d-price">35 500 AZN</div>
+        <div id="detTitle" class="d-title">Mercedes E-Class, 2014 il</div>
+
+        <div class="info-grid">
+            <div class="info-row"><span class="info-label">Şəhər</span> <span id="detCity" class="info-value">Bakı</span></div>
+            <div class="info-row"><span class="info-label">Marka</span> <span class="info-value">Mercedes</span></div>
+            <div class="info-row"><span class="info-label">Buraxılış ili</span> <span id="detYear" class="info-value">2014</span></div>
+            <div class="info-row"><span class="info-label">Mühərrik</span> <span id="detEngine" class="info-value">2.2 L</span></div>
+            <div class="info-row"><span class="info-label">Yanacaq növü</span> <span class="info-value">Dizel</span></div>
+            <div class="info-row"><span class="info-label">Sürətlər qutusu</span> <span class="info-value">Avtomat</span></div>
+        </div>
+
+        <div style="margin-top: 20px; line-height: 1.6; color: #ccc; font-size: 14px;">
+            Maşın ideal vəziyyətdədir. Heç bir xərc tələb etmir. Real alıcıya endirim olacaq.
+        </div>
+    </div>
+
+    <div class="call-bar">
+        <button class="msg-btn"><i class="fa-regular fa-comment"></i></button>
+        <button class="call-btn" onclick="window.location.href='tel:+9940000000'">
+            <i class="fa-solid fa-phone"></i> Zəng et
+        </button>
+    </div>
 </div>
 
 <script>
-    let currentStep = 1;
-    function startWizard() { document.getElementById('step1').classList.add('active'); }
-    function closeWizard() { document.querySelectorAll('.step-page').forEach(s => s.classList.remove('active')); currentStep = 1; }
-    function goNext(step) { document.getElementById('step'+currentStep).classList.remove('active'); currentStep = step; document.getElementById('step'+currentStep).classList.add('active'); }
-    function goBack(step) { document.getElementById('step'+currentStep).classList.remove('active'); currentStep = step; document.getElementById('step'+currentStep).classList.add('active'); }
+    function showDetails(title, price, year, engine, city) {
+        document.getElementById('detTitle').innerText = title + ", " + year + " il";
+        document.getElementById('detPrice').innerText = price;
+        document.getElementById('detYear').innerText = year;
+        document.getElementById('detEngine').innerText = engine;
+        document.getElementById('detCity').innerText = city;
+        
+        document.getElementById('detailsPage').style.display = 'block';
+        document.body.style.overflow = 'hidden'; // Arxa fon sürüşməsin
+    }
 
-    function finish() {
-        document.body.innerHTML = `
-            <div style="height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: #121212; color: white; padding: 20px;">
-                <i class="fa-solid fa-circle-check" style="font-size: 5rem; color: #ca1016; margin-bottom: 20px;"></i>
-                <h1 style="font-size: 1.8rem; margin-bottom: 10px;">Elanınız gözləmədə</h1>
-                <p style="color: #a5a5a5;">Uğurla göndərildi. Tezliklə yoxlanılıb dərc olunacaq.</p>
-                <button onclick="location.reload()" style="margin-top: 30px; background: #ca1016; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold;">Ana səhifəyə qayıt</button>
-            </div>
-        `;
+    function closeDetails() {
+        document.getElementById('detailsPage').style.display = 'none';
+        document.body.style.overflow = 'auto';
     }
 </script>
 
