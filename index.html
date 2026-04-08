@@ -3,194 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ekoş Proyekt - Tam İnterfeys</title>
+    <title>Ekoş - Bot Təsdiqli Qeydiyyat</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        * { box-sizing: border-box; }
-        body {
-            background-color: #000;
-            color: #fff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding-bottom: 80px;
-        }
-
-        /* --- QEYDİYYAT SƏHİFƏSİ --- */
-        #auth-page {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            padding: 20px;
-        }
-        .auth-card {
-            background: #1a1a1a;
-            width: 100%;
-            max-width: 400px;
-            padding: 30px;
-            border-radius: 20px;
-            text-align: center;
-        }
-        .auth-card h2 { color: #E53935; margin-bottom: 20px; }
-        .input-group { margin-bottom: 15px; text-align: left; }
-        input {
-            width: 100%;
-            padding: 12px;
-            background: #333;
-            border: 1px solid #444;
-            border-radius: 10px;
-            color: white;
-            outline: none;
-        }
-        .btn-main {
-            width: 100%;
-            padding: 14px;
-            background: #E53935;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        /* --- KABİNET SƏHİFƏSİ (Gizli başlayır) --- */
-        #profile-page { display: none; }
-
-        .header { padding: 20px; display: flex; align-items: center; justify-content: space-between; }
-        .user-info { display: flex; align-items: center; }
-        .avatar {
-            width: 55px; height: 55px; background: #333;
-            border-radius: 50%; display: flex; align-items: center;
-            justify-content: center; margin-right: 15px;
-        }
-        
-        .balance-card {
-            background: #1a1a1a; margin: 10px 20px; padding: 15px;
-            border-radius: 15px; display: flex; justify-content: space-between; align-items: center;
-        }
-        .balance-amount { font-size: 20px; font-weight: bold; display: block; }
-        .btn-topup { background: #4A89FF; color: white; border: none; padding: 10px 18px; border-radius: 10px; font-weight: bold; }
-
-        .quick-actions { display: flex; justify-content: space-around; padding: 20px; border-bottom: 1px solid #222; }
-        .action-item { text-align: center; color: #ccc; font-size: 12px; }
-        .action-item i { display: block; font-size: 22px; margin-bottom: 8px; }
-
-        .tabs { display: flex; padding: 15px 20px; gap: 10px; overflow-x: auto; }
-        .tab { background: #1a1a1a; padding: 8px 15px; border-radius: 20px; font-size: 13px; white-space: nowrap; }
-        .tab.active { background: #E53935; }
-
-        /* Elan Kartı */
-        .card { background: #000; margin: 20px; width: 170px; }
-        .card-img { position: relative; border-radius: 12px; overflow: hidden; }
-        .card-img img { width: 100%; display: block; }
-        .badge-status { position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.7); font-size: 10px; padding: 4px 8px; border-radius: 4px; }
-        .btn-action { width: 100%; background: #e3f2fd; color: #1976d2; border: none; padding: 10px; border-radius: 8px; margin-top: 10px; font-weight: bold; }
-
-        /* --- AŞAĞI MENYU --- */
-        .bottom-nav {
-            position: fixed; bottom: 0; width: 100%; background: #111;
-            display: flex; justify-content: space-around; align-items: center;
-            padding: 10px 0 15px 0; border-top: 1px solid #222;
-        }
-        .nav-item { text-align: center; color: #888; font-size: 10px; flex: 1; text-decoration: none; }
-        .nav-item.active { color: #E53935; }
-        .nav-item i { font-size: 20px; display: block; margin-bottom: 4px; }
-        .center-btn { position: relative; top: -15px; }
-        .plus-icon {
-            background: #E53935; width: 50px; height: 50px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 5px; color: white; font-size: 24px;
-            box-shadow: 0 4px 12px rgba(229, 57, 53, 0.4);
-        }
+        body { background-color: #000; color: #fff; font-family: sans-serif; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .auth-card { background: #1a1a1a; padding: 30px; border-radius: 20px; width: 90%; max-width: 350px; text-align: center; }
+        h2 { color: #E53935; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid #333; background: #222; color: white; outline: none; }
+        .btn-main { width: 100%; padding: 14px; background: #E53935; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .hidden { display: none; }
+        .status-msg { font-size: 12px; color: #4A89FF; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <div id="auth-page">
-        <div class="auth-card">
-            <h2>Xoş Gəlmisən</h2>
-            <div class="input-group">
-                <input type="text" id="username" placeholder="İstifadəçi adı">
-            </div>
-            <div class="input-group">
-                <input type="email" placeholder="E-poçt ünvanı">
-            </div>
-            <div class="input-group">
-                <input type="password" placeholder="Şifrə">
-            </div>
-            <button class="btn-main" onclick="goToProfile()">Qeydiyyatı Tamamla</button>
-        </div>
+    <div class="auth-card" id="step1">
+        <h2>Qeydiyyat</h2>
+        <input type="text" id="reg-name" placeholder="Adınız">
+        <input type="text" id="reg-phone" placeholder="Nömrə (məs: 0705175737)">
+        <button class="btn-main" onclick="sendVerification()">Kod Göndər</button>
+        <p class="status-msg">Bot nömrənizə təsdiq kodu göndərəcək.</p>
     </div>
 
-    <div id="profile-page">
-        <div class="header">
-            <div class="user-info">
-                <div class="avatar"><i class="fa fa-user fa-xl"></i></div>
-                <div class="phone-number" id="display-name">(070) 517-57-37</div>
-            </div>
-            <i class="fa fa-cog fa-lg"></i>
-        </div>
-
-        <div class="balance-card">
-            <div>
-                <span style="color: #888; font-size: 13px;">Şəxsi hesab</span>
-                <span class="balance-amount">0,00 AZN</span>
-            </div>
-            <button class="btn-topup">Balansı artır</button>
-        </div>
-
-        <div class="quick-actions">
-            <div class="action-item"><i class="fa fa-history"></i>Əməliyyat tarixçəsi</div>
-            <div class="action-item"><i class="fa fa-credit-card"></i>Kartlarım</div>
-        </div>
-
-        <div class="tabs">
-            <div class="tab active">Bütün elanlar 1</div>
-            <div class="tab">Hazırda saytda</div>
-            <div class="tab">Müddəti başa çatmış 1</div>
-        </div>
-
-        <div class="card">
-            <div class="card-img">
-                <img src="https://via.placeholder.com/200x140/222/fff?text=Mercedes+C200" alt="Car">
-                <div class="badge-status">Müddəti başa çatmış</div>
-            </div>
-            <button class="btn-action">Bərpa et</button>
-            <div style="padding: 10px 0;">
-                <div style="font-weight: bold; font-size: 18px;">7 700 ₼</div>
-                <div style="font-size: 14px; color: #ccc;">Mercedes C 200</div>
-                <div style="font-size: 11px; color: #777;">2002, 1.8L, 390 000 km</div>
-            </div>
-        </div>
-
-        <div class="bottom-nav">
-            <a href="#" class="nav-item"><i class="fa fa-home"></i>Əsas</a>
-            <a href="#" class="nav-item"><i class="fa fa-heart"></i>Seçilmişlər</a>
-            <div class="nav-item center-btn">
-                <div class="plus-icon">+</div>
-                <span>Yeni Elan</span>
-            </div>
-            <a href="#" class="nav-item"><i class="fa fa-comment"></i>Mesajlar</a>
-            <a href="#" class="nav-item active"><i class="fa fa-user"></i>Kabinet</a>
-        </div>
+    <div class="auth-card hidden" id="step2">
+        <h2>Təsdiqlə</h2>
+        <p style="font-size: 13px; color: #888;">WhatsApp ilə göndərilən 4 rəqəmli kodu daxil edin</p>
+        <input type="number" id="verify-code" placeholder="0000">
+        <button class="btn-main" onclick="finishAuth()">Təsdiqlə və Giriş Et</button>
+        <p id="error-msg" style="color: red; font-size: 12px; margin-top: 10px;"></p>
     </div>
 
     <script>
-        function goToProfile() {
-            const name = document.getElementById('username').value;
-            if(name) {
-                // Adı kabinetdə göstər
-                document.getElementById('display-name').innerText = name;
-                // Səhifələri dəyiş
-                document.getElementById('auth-page').style.display = 'none';
-                document.getElementById('profile-page').style.display = 'block';
-                document.body.style.backgroundColor = '#000';
+        let generatedCode = "1234"; // Test üçün sabit kod (Normalda bot göndərəcək)
+
+        function sendVerification() {
+            const name = document.getElementById('reg-name').value;
+            const phone = document.getElementById('reg-phone').value;
+
+            if(name && phone) {
+                // Burada API-yə sorğu göndərilir (Məsələn: Ultra-MD botuna)
+                // fetch(`https://api.yourbot.com/send?number=${phone}&message=Kodunuz:${generatedCode}`);
+                
+                alert(phone + " nömrəsinə WhatsApp kodu göndərildi! (Simulyasiya: 1234)");
+                
+                document.getElementById('step1').classList.add('hidden');
+                document.getElementById('step2').classList.remove('hidden');
             } else {
-                alert("Zəhmət olmasa istifadəçi adını daxil edin!");
+                alert("Zəhmət olmasa bütün xanaları doldurun!");
+            }
+        }
+
+        function finishAuth() {
+            const inputCode = document.getElementById('verify-code').value;
+            if(inputCode === generatedCode) {
+                alert("Təbriklər! Qeydiyyat uğurla tamamlandı.");
+                window.location.reload(); // Realda bura Profil səhifəsinə yönləndirmə olacaq
+            } else {
+                document.getElementById('error-msg').innerText = "Kod yanlışdır! Yenidən yoxlayın.";
             }
         }
     </script>
+
 </body>
 </html>
